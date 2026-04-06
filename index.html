@@ -1,0 +1,1736 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LitopOS v1.0.0 - Documentation</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap');
+
+:root {
+  --bg: #ffffff;
+  --bg2: #f8f9fb;
+  --bg3: #f0f2f5;
+  --card: #ffffff;
+  --border: #e2e5ea;
+  --border2: #d0d4dc;
+  --text: #1a1d23;
+  --text2: #3d4250;
+  --dim: #7c8293;
+  --accent: #2563eb;
+  --accent2: #1d4ed8;
+  --green: #16a34a;
+  --green2: #f0fdf4;
+  --red: #dc2626;
+  --red2: #fef2f2;
+  --orange: #d97706;
+  --orange2: #fffbeb;
+  --purple: #7c3aed;
+  --purple2: #f5f3ff;
+  --cyan: #0891b2;
+  --cyan2: #ecfeff;
+  --font-ui: 'Source Sans 3', system-ui, -apple-system, sans-serif;
+  --font-code: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+  --sidebar-w: 260px;
+  --nav-h: 52px;
+  --nav-bg: rgba(255,255,255,0.92);
+  --shadow-color: rgba(0,0,0,0.08);
+  --tag-sys-bg: #dbeafe;
+  --tag-sys-color: #1d4ed8;
+  --tag-hw-bg: #fef3c7;
+  --tag-hw-color: #92400e;
+  --tag-fs-bg: #d1fae5;
+  --tag-fs-color: #065f46;
+  --tag-net-bg: #e0e7ff;
+  --tag-net-color: #3730a3;
+  --tag-sec-bg: #fce7f3;
+  --tag-sec-color: #9d174d;
+  --tag-app-bg: #f3e8ff;
+  --tag-app-color: #6b21a8;
+  --highlight-bg: #fef08a;
+}
+
+[data-theme="dark"] {
+  --bg: #1a1b2e;
+  --bg2: #232540;
+  --bg3: #2c2e4a;
+  --card: #232540;
+  --border: #363952;
+  --border2: #454868;
+  --text: #e2e4e9;
+  --text2: #b0b4c4;
+  --dim: #7c8293;
+  --accent: #60a5fa;
+  --accent2: #3b82f6;
+  --green: #4ade80;
+  --green2: #1a2e1a;
+  --red: #f87171;
+  --red2: #2e1a1a;
+  --orange: #fbbf24;
+  --orange2: #2e2a1a;
+  --purple: #c084fc;
+  --purple2: #2a1a2e;
+  --cyan: #22d3ee;
+  --cyan2: #1a2a2e;
+  --nav-bg: rgba(26,27,46,0.92);
+  --shadow-color: rgba(0,0,0,0.3);
+  --tag-sys-bg: #1e2a4a;
+  --tag-sys-color: #93c5fd;
+  --tag-hw-bg: #2e2a1a;
+  --tag-hw-color: #fcd34d;
+  --tag-fs-bg: #1a2e1a;
+  --tag-fs-color: #6ee7b7;
+  --tag-net-bg: #1e1e3a;
+  --tag-net-color: #a5b4fc;
+  --tag-sec-bg: #2e1a2a;
+  --tag-sec-color: #f9a8d4;
+  --tag-app-bg: #2a1a2e;
+  --tag-app-color: #d8b4fe;
+  --highlight-bg: #4a4a1a;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font-ui);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  font-size: 15px;
+}
+
+/* === NAV === */
+nav {
+  position: fixed; top:0; left:0; right:0; z-index:100;
+  background: var(--nav-bg);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  height: var(--nav-h);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 24px;
+}
+nav .logo {
+  font-family: var(--font-code);
+  font-weight: 700; font-size: 16px;
+  color: var(--text);
+  letter-spacing: -0.5px;
+}
+nav .logo span { color: var(--dim); font-weight: 400; }
+nav .nav-center {
+  display: flex; align-items: center; gap: 12px;
+}
+nav .search-box {
+  display:flex; align-items:center;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0 12px;
+  height: 34px;
+  width: 280px;
+  transition: border-color .2s;
+}
+nav .search-box:focus-within { border-color: var(--accent); }
+nav .search-box svg { width:14px; height:14px; color:var(--dim); flex-shrink:0; }
+nav .search-box input {
+  border:none; background:none; outline:none;
+  font-family: var(--font-ui);
+  font-size: 13px; color: var(--text);
+  width: 100%; margin-left: 8px;
+}
+nav .search-box input::placeholder { color: var(--dim); }
+nav .nav-right {
+  display: flex; align-items: center; gap: 8px;
+}
+nav .ver {
+  font-family: var(--font-code);
+  font-size: 11px; color: var(--dim);
+  background: var(--bg2);
+  padding: 3px 8px; border-radius: 4px;
+  border: 1px solid var(--border);
+}
+.nav-btn {
+  display: flex; align-items: center; justify-content: center;
+  width: 34px; height: 34px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all .15s;
+  font-family: var(--font-code);
+  font-size: 12px;
+  font-weight: 600;
+}
+.nav-btn:hover { border-color: var(--accent); color: var(--accent); }
+.nav-btn svg { width:16px; height:16px; }
+
+/* === LAYOUT === */
+.layout {
+  display: flex;
+  margin-top: var(--nav-h);
+  min-height: calc(100vh - var(--nav-h));
+}
+
+/* === SIDEBAR === */
+.sidebar {
+  width: var(--sidebar-w);
+  flex-shrink: 0;
+  border-right: 1px solid var(--border);
+  background: var(--bg);
+  padding: 20px 0;
+  position: sticky;
+  top: var(--nav-h);
+  height: calc(100vh - var(--nav-h));
+  overflow-y: auto;
+}
+.sidebar::-webkit-scrollbar { width:3px; }
+.sidebar::-webkit-scrollbar-thumb { background:var(--border2); border-radius:3px; }
+.sb-section {
+  padding: 0 16px;
+  margin-bottom: 20px;
+}
+.sb-title {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--dim);
+  margin-bottom: 8px;
+}
+.sb-link {
+  display: block;
+  color: var(--text2);
+  text-decoration: none;
+  font-size: 13px;
+  padding: 4px 8px;
+  border-radius: 5px;
+  transition: all .15s;
+  line-height: 1.5;
+}
+.sb-link:hover { background: var(--bg2); color: var(--accent); }
+.sb-link.active { background: var(--accent2); color: #fff; }
+
+/* === MAIN === */
+.main {
+  flex: 1;
+  max-width: 820px;
+  padding: 40px 48px 80px;
+  min-width: 0;
+}
+
+/* === TYPOGRAPHY === */
+h1 {
+  font-size: 32px; font-weight: 700;
+  letter-spacing: -0.5px;
+  margin-bottom: 8px;
+  color: var(--text);
+}
+.doc-subtitle {
+  font-size: 16px; color: var(--dim);
+  margin-bottom: 32px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--border);
+}
+h2 {
+  font-size: 22px; font-weight: 700;
+  letter-spacing: -0.3px;
+  margin: 48px 0 12px;
+  padding-top: 24px;
+  color: var(--text);
+}
+h2:first-of-type { margin-top: 0; }
+h3 {
+  font-size: 16px; font-weight: 600;
+  margin: 24px 0 8px;
+  color: var(--text);
+}
+p { margin-bottom: 12px; color: var(--text2); }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* === CALLOUT === */
+.callout {
+  padding: 14px 18px;
+  border-radius: 8px;
+  margin: 16px 0;
+  font-size: 13px;
+  border-left: 3px solid;
+}
+.callout.info { background: var(--cyan2); border-color: var(--cyan); color: var(--text2); }
+.callout.warn { background: var(--orange2); border-color: var(--orange); color: var(--text2); }
+.callout.tip { background: var(--green2); border-color: var(--green); color: var(--text2); }
+.callout.danger { background: var(--red2); border-color: var(--red); color: var(--text2); }
+.callout strong { display:block; margin-bottom:2px; }
+
+/* === CODE === */
+.code-block {
+  background: #1e1e2e;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  margin: 16px 0;
+}
+.code-bar {
+  display:flex; align-items:center; justify-content:space-between;
+  padding: 8px 14px;
+  background: #181825;
+  border-bottom: 1px solid #313244;
+}
+.code-bar .lang {
+  font-family: var(--font-code);
+  font-size: 11px; color: #6c7086;
+}
+.code-bar .copy-btn {
+  font-family: var(--font-code);
+  font-size: 11px; color: #6c7086;
+  background: none; border: 1px solid #313244;
+  padding: 2px 8px; border-radius: 4px;
+  cursor: pointer; transition: all .15s;
+}
+.code-bar .copy-btn:hover { color:#cdd6f4; border-color:#585b70; }
+pre {
+  padding: 14px 16px; overflow-x:auto;
+  font-family: var(--font-code);
+  font-size: 12.5px; line-height: 1.7;
+  color: #cdd6f4;
+  background: #1e1e2e;
+}
+.cm { color: #6c7086; font-style: italic; }
+.ck { color: #89b4fa; }
+.cg { color: #a6e3a1; }
+.cy { color: #f9e2af; }
+.cr { color: #f38ba8; }
+.cv { color: #cba6f7; }
+.co { color: #89dceb; }
+.cp { color: #fab387; }
+
+/* Inline code */
+code {
+  font-family: var(--font-code);
+  font-size: 12.5px;
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 4px;
+  color: var(--accent);
+}
+
+/* === TABLE === */
+.doc-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  margin: 16px 0;
+}
+.doc-table th {
+  text-align: left;
+  padding: 8px 12px;
+  background: var(--bg2);
+  color: var(--dim);
+  font-weight: 600;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 2px solid var(--border);
+}
+.doc-table td {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text2);
+  vertical-align: top;
+}
+.doc-table tr:last-child td { border-bottom: none; }
+.doc-table tr:hover td { background: var(--bg2); }
+.doc-table code { font-size: 12px; }
+
+/* === STEP LIST === */
+.step-list { counter-reset: step; }
+.step-item {
+  counter-increment: step;
+  display: flex;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+.step-item::before {
+  content: counter(step);
+  flex-shrink: 0;
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  font-family: var(--font-code);
+  font-size: 12px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  margin-top: 2px;
+}
+.step-item h3 { margin: 0 0 4px; }
+.step-item p { margin: 0; font-size: 13px; }
+
+/* === SEARCH RESULTS === */
+.search-results {
+  position: fixed;
+  top: var(--nav-h);
+  left: 0; right: 0;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  max-height: 60vh;
+  overflow-y: auto;
+  z-index: 99;
+  display: none;
+  box-shadow: 0 8px 24px var(--shadow-color);
+}
+.search-results.active { display: block; }
+.sr-item {
+  display: flex; align-items: baseline; gap: 12px;
+  padding: 10px 24px;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: background .1s;
+}
+.sr-item:hover { background: var(--bg2); }
+.sr-item code {
+  flex-shrink: 0;
+  min-width: 160px;
+}
+.sr-item span { color: var(--dim); font-size: 13px; }
+.sr-empty {
+  padding: 20px 24px;
+  color: var(--dim);
+  font-size: 13px;
+  text-align: center;
+}
+.sr-count {
+  padding: 8px 24px;
+  font-size: 11px;
+  color: var(--dim);
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+}
+
+/* === TAG === */
+.tag {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 2px 7px;
+  border-radius: 3px;
+  margin-right: 4px;
+}
+.tag.sys { background: var(--tag-sys-bg); color: var(--tag-sys-color); }
+.tag.hw { background: var(--tag-hw-bg); color: var(--tag-hw-color); }
+.tag.fs { background: var(--tag-fs-bg); color: var(--tag-fs-color); }
+.tag.net { background: var(--tag-net-bg); color: var(--tag-net-color); }
+.tag.sec { background: var(--tag-sec-bg); color: var(--tag-sec-color); }
+.tag.app { background: var(--tag-app-bg); color: var(--tag-app-color); }
+
+/* === FOOTER === */
+.doc-footer {
+  margin-top: 48px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+  font-size: 12px;
+  color: var(--dim);
+}
+
+/* === TOAST === */
+.toast {
+  position:fixed; bottom:20px; right:20px; z-index:200;
+  background: var(--text);
+  color: var(--bg);
+  padding: 8px 16px;
+  border-radius: 6px; font-size:13px;
+  font-family: var(--font-code);
+  transform: translateY(60px); opacity:0;
+  transition: all .25s;
+}
+.toast.show { transform: translateY(0); opacity:1; }
+
+/* === RESPONSIVE === */
+@media (max-width:860px) {
+  .sidebar { display:none; }
+  .main { padding: 24px 20px 60px; }
+  nav .search-box { width: 180px; }
+}
+@media (max-width:500px) {
+  nav .ver { display:none; }
+  nav .search-box { width: 140px; }
+  h1 { font-size: 24px; }
+  pre { font-size: 11px; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo" data-i18n="logo">LitopOS<span>.v1.0.0</span></div>
+  <div class="nav-center">
+    <button class="nav-btn" id="langBtn" title="Switch Language" onclick="toggleLang()">EN</button>
+    <div class="search-box">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+      <input type="text" id="searchInput" data-i18n-placeholder="search_placeholder" placeholder="Search commands..." autocomplete="off">
+    </div>
+  </div>
+  <div class="nav-right">
+    <button class="nav-btn" id="themeBtn" title="Toggle Theme" onclick="toggleTheme()">
+      <svg id="themeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+      </svg>
+    </button>
+    <div class="ver">v1.0.0</div>
+  </div>
+</nav>
+
+<!-- SEARCH RESULTS -->
+<div class="search-results" id="searchResults"></div>
+
+<!-- LAYOUT -->
+<div class="layout">
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sb-section">
+    <div class="sb-title" data-i18n="sb_getting_started">Getting Started</div>
+    <a class="sb-link" href="#overview" data-i18n="sb_overview">Overview</a>
+    <a class="sb-link" href="#install" data-i18n="sb_install">Installation</a>
+    <a class="sb-link" href="#first-run" data-i18n="sb_first_run">First Run</a>
+  </div>
+  <div class="sb-section">
+    <div class="sb-title" data-i18n="sb_core_systems">Core Systems</div>
+    <a class="sb-link" href="#drives" data-i18n="sb_drives">Drive System</a>
+    <a class="sb-link" href="#auth" data-i18n="sb_auth">Authentication</a>
+    <a class="sb-link" href="#apps" data-i18n="sb_apps">App Manager</a>
+    <a class="sb-link" href="#web" data-i18n="sb_web">Web Server</a>
+  </div>
+  <div class="sb-section">
+    <div class="sb-title" data-i18n="sb_command_reference">Command Reference</div>
+    <a class="sb-link" href="#cmd-system" data-i18n="sb_system">System</a>
+    <a class="sb-link" href="#cmd-gpio" data-i18n="sb_gpio">GPIO / LED</a>
+    <a class="sb-link" href="#cmd-wifi" data-i18n="sb_wifi">WiFi</a>
+    <a class="sb-link" href="#cmd-file" data-i18n="sb_file">File System</a>
+    <a class="sb-link" href="#cmd-sensor" data-i18n="sb_sensor">Sensor / ADC</a>
+    <a class="sb-link" href="#cmd-network" data-i18n="sb_network">Network</a>
+    <a class="sb-link" href="#cmd-crypto" data-i18n="sb_crypto">Crypto / Hash</a>
+    <a class="sb-link" href="#cmd-task" data-i18n="sb_task">Task / Timer</a>
+  </div>
+  <div class="sb-section">
+    <div class="sb-title">API</div>
+    <a class="sb-link" href="#api" data-i18n="sb_api">HTTP Endpoints</a>
+  </div>
+</aside>
+
+<!-- MAIN CONTENT -->
+<main class="main">
+
+<!-- OVERVIEW -->
+<h1 data-i18n="title">LitopOS Documentation</h1>
+<p class="doc-subtitle" data-i18n="subtitle">MicroPython Embedded Shell for ESP32 -- 354 commands, drive system, auth, app manager, web server.</p>
+
+<section id="overview">
+<h2 data-i18n="overview_text">Overview</h2>
+<p data-i18n="overview_desc">LitopOS is a micro operating system running on ESP32 with MicroPython. It provides a Unix-like shell experience with 354 commands, an A-Z drive letter system, user authentication, a third-party app manager, and a built-in AP web server.</p>
+
+<div class="callout info">
+  <strong data-i18n="requirements">Requirements</strong>
+  <span data-i18n="requirements_text">ESP32 / ESP32-S2 / ESP32-S3 / ESP32-C3 with MicroPython firmware (1.19+).</span>
+</div>
+
+<h3 data-i18n="feature_summary">Feature Summary</h3>
+<table class="doc-table">
+  <tr><td data-i18n="shell_commands">Shell Commands</td><td data-i18n="shell_commands_val">354 registered + 61 aliases</td></tr>
+  <tr><td data-i18n="drive_system_feat">Drive System</td><td data-i18n="drive_system_feat_val">A-Z auto-mount from flash partitions</td></tr>
+  <tr><td data-i18n="authentication_feat">Authentication</td><td data-i18n="authentication_feat_val">admin/user roles, SHA256 password hashing</td></tr>
+  <tr><td data-i18n="app_manager_feat">App Manager</td><td data-i18n="app_manager_feat_val">Install/run/uninstall .py apps from A:/.app/</td></tr>
+  <tr><td data-i18n="web_server_feat">Web Server</td><td data-i18n="web_server_feat_val">AP mode + REST API + custom HTML hosting</td></tr>
+  <tr><td data-i18n="hardware_feat">Hardware</td><td data-i18n="hardware_feat_val">GPIO, ADC, DAC, PWM, I2C, SPI, UART, 1-Wire</td></tr>
+  <tr><td data-i18n="connectivity_feat">Connectivity</td><td data-i18n="connectivity_feat_val">WiFi (STA/AP), BLE, HTTP, MQTT, TCP, UDP</td></tr>
+  <tr><td data-i18n="task_system_feat">Task System</td><td data-i18n="task_system_feat_val">Multi-thread, timer, message queue</td></tr>
+</table>
+</section>
+
+<!-- INSTALL -->
+<section id="install">
+<h2 data-i18n="installation">Installation</h2>
+
+<div class="step-list">
+  <div class="step-item">
+    <div>
+      <h3 data-i18n="flash_firmware">Flash MicroPython Firmware</h3>
+      <p data-i18n="flash_firmware_desc">Download ESP32 MicroPython firmware and flash it with esptool.</p>
+    </div>
+  </div>
+  <div class="step-item">
+    <div>
+      <h3 data-i18n="upload_files">Upload LitopOS Files</h3>
+      <p data-i18n="upload_files_desc">Upload the project to the ESP32 flash filesystem using ampy or Thonny.</p>
+    </div>
+  </div>
+  <div class="step-item">
+    <div>
+      <h3 data-i18n="reset_device">Reset</h3>
+      <p data-i18n="reset_device_desc">Press the RST button. LitopOS boots automatically from main.py.</p>
+    </div>
+  </div>
+</div>
+
+<div class="code-block">
+  <div class="code-bar">
+    <span class="lang">bash</span>
+    <button class="copy-btn" onclick="copyCode(this)">copy</button>
+  </div>
+  <pre><span class="cm"># Install esptool</span>
+pip install esptool adafruit-ampy
+
+<span class="cm"># Erase flash and flash MicroPython firmware</span>
+esptool.py --chip esp32 erase_flash
+esptool.py --chip esp32 write_flash -z 0x1000 micropython-firmware.bin
+
+<span class="cm"># Upload LitopOS (18 files)</span>
+ampy --port /dev/ttyUSB0 put boot.py
+ampy --port /dev/ttyUSB0 put main.py
+ampy --port /dev/ttyUSB0 mkdir litopos
+ampy --port /dev/ttyUSB0 mkdir litopos/core
+ampy --port /dev/ttyUSB0 mkdir litopos/commands
+ampy --port /dev/ttyUSB0 mkdir litopos/drivers
+ampy --port /dev/ttyUSB0 mkdir litopos/network
+ampy --port /dev/ttyUSB0 mkdir litopos/scheduler
+ampy --port /dev/ttyUSB0 mkdir litopos/utils
+ampy --port /dev/ttyUSB0 put litopos/__init__.py litopos/__init__.py
+ampy --port /dev/ttyUSB0 put litopos/core/__init__.py litopos/core/__init__.py
+ampy --port /dev/ttyUSB0 put litopos/core/platform.py litopos/core/platform.py
+ampy --port /dev/ttyUSB0 put litopos/core/commands.py litopos/core/commands.py
+ampy --port /dev/ttyUSB0 put litopos/core/shell.py litopos/core/shell.py
+ampy --port /dev/ttyUSB0 put litopos/core/drives.py litopos/core/drives.py
+ampy --port /dev/ttyUSB0 put litopos/core/auth.py litopos/core/auth.py
+ampy --port /dev/ttyUSB0 put litopos/core/apps.py litopos/core/apps.py
+ampy --port /dev/ttyUSB0 put litopos/commands/__init__.py litopos/commands/__init__.py
+ampy --port /dev/ttyUSB0 put litopos/drivers/__init__.py litopos/drivers/__init__.py
+ampy --port /dev/ttyUSB0 put litopos/drivers/gpio.py litopos/drivers/gpio.py
+ampy --port /dev/ttyUSB0 put litopos/drivers/bus.py litopos/drivers/bus.py
+ampy --port /dev/ttyUSB0 put litopos/network/__init__.py litopos/network/__init__.py
+ampy --port /dev/ttyUSB0 put litopos/scheduler/__init__.py litopos/scheduler/__init__.py
+ampy --port /dev/ttyUSB0 put litopos/utils/__init__.py litopos/utils/__init__.py</pre>
+</div>
+
+<div class="callout info">
+  <strong data-i18n="required_files_note">Required Files (18 total)</strong>
+  <span data-i18n="required_files_list">boot.py, main.py, litopos/__init__.py, litopos/core/ (6 files), litopos/commands/__init__.py, litopos/drivers/ (3 files), litopos/network/__init__.py, litopos/scheduler/__init__.py, litopos/utils/__init__.py</span>
+</div>
+
+<div class="callout warn">
+  <strong data-i18n="not_required_note">Not Required</strong>
+  <span data-i18n="not_required_list">quickstart.html, README.md, docs/, examples/, tests/ are for reference only.</span>
+</div>
+</section>
+
+<!-- FIRST RUN -->
+<section id="first-run">
+<h2 data-i18n="first_run">First Run</h2>
+<p data-i18n="first_run_text">After reset, LitopOS displays the boot screen with chip detection, memory info, drive mapping, and feature list. The default account is <code>admin</code> / <code>admin</code>.</p>
+
+<div class="code-block">
+  <div class="code-bar">
+    <span class="lang">shell</span>
+    <button class="copy-btn" onclick="copyCode(this)">copy</button>
+  </div>
+  <pre>   _   _  ___  ____
+  | | | |/ _ \|  _ \
+  | |_| | | | | |_) |
+  |  _  | |_| |  _ &lt;
+  |_| |_|\___/|_| \_\
+
+  Chip:      ESP32
+  Drives:    A:
+  Default:   A:
+  Apps:      A:/.app/
+
+  354 commands loaded
+  Type <span class="cg">'help'</span> for commands
+LitopOS&gt; <span class="ck">_</span></pre>
+</div>
+
+<h3 data-i18n="essential_commands">Essential Commands</h3>
+<div class="code-block">
+  <div class="code-bar">
+    <span class="lang">shell</span>
+    <button class="copy-btn" onclick="copyCode(this)">copy</button>
+  </div>
+  <pre><span class="cg">help</span>              <span class="cm"># Show all commands</span>
+<span class="cg">help wifi</span>         <span class="cm"># Show WiFi commands</span>
+<span class="cg">sys_info</span>          <span class="cm"># System information</span>
+<span class="cg">drives</span>            <span class="cm"># List all drives</span>
+<span class="cg">whoami</span>            <span class="cm"># Current user</span>
+<span class="cg">app_list</span>          <span class="cm"># List installed apps</span></pre>
+</div>
+</section>
+
+<!-- DRIVES -->
+<section id="drives">
+<h2 data-i18n="drives_title">Drive System</h2>
+<p data-i18n="drives_text">On first boot, LitopOS scans all flash partitions and mounts filesystem partitions (SPIFFS, LittleFS, FAT) as drive letters A through Z. Drive A: is the default -- all files are saved there unless you specify otherwise.</p>
+
+<div class="callout tip">
+  <strong data-i18n="default_drive">Default Drive</strong>
+  <span data-i18n="default_drive_text">A: is always the default drive. It contains <code>.app/</code> for third-party apps and <code>.auth.json</code> for user data.</span>
+</div>
+
+<h3 data-i18n="dir_structure">Directory Structure</h3>
+<div class="code-block">
+  <div class="code-bar"><span class="lang">text</span></div>
+  <pre>A:/
+  .app/            Third-party applications
+  .auth.json       User database
+  config.json      System configuration
+  startup.py       Auto-run script</pre>
+</div>
+
+<h3 data-i18n="commands">Commands</h3>
+<table class="doc-table" id="tbl-drives">
+  <thead><tr><th>Command</th><th data-i18n="th_description">Description</th></tr></thead>
+  <tbody>
+    <tr><td><code>drives</code></td><td data-i18n="drives_cmd_drives">List all mounted drives with type and size</td></tr>
+    <tr><td><code>drive &lt;letter&gt;</code></td><td data-i18n="drives_cmd_drive">Browse files on a drive (e.g. <code>drive A:</code>)</td></tr>
+    <tr><td><code>drive_free &lt;letter&gt;</code></td><td data-i18n="drives_cmd_drive_free">Show free/used space with progress bar</td></tr>
+    <tr><td><code>drive_browse &lt;letter&gt; &lt;path&gt;</code></td><td data-i18n="drives_cmd_drive_browse">Browse a subfolder on a drive</td></tr>
+    <tr><td><code>drive_cd &lt;letter&gt;</code></td><td data-i18n="drives_cmd_drive_cd">Change the default drive</td></tr>
+  </tbody>
+</table>
+</section>
+
+<!-- AUTH -->
+<section id="auth">
+<h2 data-i18n="auth_title">Authentication</h2>
+<p data-i18n="auth_text">LitopOS includes a user authentication system with role-based access control. System files (<code>/boot.py</code>, <code>/main.py</code>, <code>/litopos/</code>) are protected and can only be deleted by admin users.</p>
+
+<h3 data-i18n="default_account">Default Account</h3>
+<div class="callout warn">
+  <strong data-i18n="security_note">Security Note</strong>
+  <span data-i18n="security_note_text">Default credentials are <code>admin</code> / <code>admin</code>. Change the password immediately with <code>passwd admin newpass</code>.</span>
+</div>
+
+<h3 data-i18n="commands">Commands</h3>
+<table class="doc-table" id="tbl-auth">
+  <thead><tr><th>Command</th><th data-i18n="th_description">Description</th></tr></thead>
+  <tbody>
+    <tr><td><code>login &lt;user&gt; &lt;pass&gt;</code></td><td data-i18n="auth_cmd_login">Login to the system</td></tr>
+    <tr><td><code>logout</code></td><td data-i18n="auth_cmd_logout">Logout current user</td></tr>
+    <tr><td><code>register &lt;user&gt; &lt;pass&gt;</code></td><td data-i18n="auth_cmd_register">Create new user (admin only)</td></tr>
+    <tr><td><code>passwd &lt;old&gt; &lt;new&gt;</code></td><td data-i18n="auth_cmd_passwd">Change current user password</td></tr>
+    <tr><td><code>whoami</code></td><td data-i18n="auth_cmd_whoami">Show current user and role</td></tr>
+    <tr><td><code>users</code></td><td data-i18n="auth_cmd_users">List all users (admin only)</td></tr>
+    <tr><td><code>su &lt;user&gt; &lt;pass&gt;</code></td><td data-i18n="auth_cmd_su">Switch to another user</td></tr>
+  </tbody>
+</table>
+</section>
+
+<!-- APPS -->
+<section id="apps">
+<h2 data-i18n="apps_title">App Manager</h2>
+<p data-i18n="apps_text">Third-party Python applications are stored in <code>A:/.app/</code>. Apps are simple <code>.py</code> files that can be installed, listed, and run with dedicated commands.</p>
+
+<h3 data-i18n="commands">Commands</h3>
+<table class="doc-table" id="tbl-apps">
+  <thead><tr><th>Command</th><th data-i18n="th_description">Description</th></tr></thead>
+  <tbody>
+    <tr><td><code>app_install &lt;file.py&gt; [name]</code></td><td data-i18n="apps_cmd_install">Install a .py file into .app/</td></tr>
+    <tr><td><code>app_uninstall &lt;name&gt;</code></td><td data-i18n="apps_cmd_uninstall">Remove an app (admin only)</td></tr>
+    <tr><td><code>app_list</code> / <code>apps</code></td><td data-i18n="apps_cmd_list">List all installed apps</td></tr>
+    <tr><td><code>app_info &lt;name&gt;</code></td><td data-i18n="apps_cmd_info">Show app details</td></tr>
+    <tr><td><code>app_run &lt;name&gt;</code> / <code>run &lt;name&gt;</code></td><td data-i18n="apps_cmd_run">Execute an installed app</td></tr>
+  </tbody>
+</table>
+
+<div class="code-block">
+  <div class="code-bar">
+    <span class="lang">shell</span>
+    <button class="copy-btn" onclick="copyCode(this)">copy</button>
+  </div>
+  <pre><span class="cm"># Install an app</span>
+LitopOS&gt; <span class="cg">app_install sensor_reader.py</span>
+Installed 'sensor_reader' -> A:/.app/sensor_reader.py (512 bytes)
+
+<span class="cm"># Run it</span>
+LitopOS&gt; <span class="cg">run sensor_reader</span>
+App 'sensor_reader' finished
+
+<span class="cm"># List all apps</span>
+LitopOS&gt; <span class="cg">apps</span>
+Installed Apps (1):
+  sensor_reader    512B  (run 'sensor_reader')</pre>
+</div>
+</section>
+
+<!-- WEB -->
+<section id="web">
+<h2 data-i18n="web_title">Web Server</h2>
+<p data-i18n="web_text">LitopOS includes a built-in HTTP server that runs in AP (Access Point) mode. When started, it creates a WiFi hotspot and serves HTML pages to connected clients.</p>
+
+<h3 data-i18n="commands">Commands</h3>
+<table class="doc-table" id="tbl-web">
+  <thead><tr><th>Command</th><th data-i18n="th_description">Description</th></tr></thead>
+  <tbody>
+    <tr><td><code>web_start [port]</code></td><td data-i18n="web_cmd_start">Start AP + web server (default port 80)</td></tr>
+    <tr><td><code>web_stop</code></td><td data-i18n="web_cmd_stop">Stop the web server</td></tr>
+    <tr><td><code>web_status</code></td><td data-i18n="web_cmd_status">Show server status, IP, and route count</td></tr>
+    <tr><td><code>web_page &lt;file.html&gt; [path]</code></td><td data-i18n="web_cmd_page">Set a custom HTML page from file</td></tr>
+    <tr><td><code>web_file &lt;file&gt; [path]</code></td><td data-i18n="web_cmd_file">Serve a file at a URL path</td></tr>
+    <tr><td><code>web_dir &lt;dir&gt; [base]</code></td><td data-i18n="web_cmd_dir">Serve all files from a directory</td></tr>
+    <tr><td><code>web_route &lt;path&gt; &lt;html&gt;</code></td><td data-i18n="web_cmd_route">Add a custom URL route</td></tr>
+    <tr><td><code>web_clear</code></td><td data-i18n="web_cmd_clear">Remove all custom routes</td></tr>
+  </tbody>
+</table>
+
+<div class="code-block">
+  <div class="code-bar">
+    <span class="lang">shell</span>
+    <button class="copy-btn" onclick="copyCode(this)">copy</button>
+  </div>
+  <pre><span class="cm"># Start web server on port 80</span>
+LitopOS&gt; <span class="cg">web_start 80</span>
+AP Web Server started!
+  SSID: 'LitopOS' | IP: 192.168.4.1 | Port: 80
+  Open http://192.168.4.1/ in browser
+
+<span class="cm"># Set custom page</span>
+LitopOS&gt; <span class="cg">web_page dashboard.html</span>
+Page set for / (2048 bytes)</pre>
+</div>
+</section>
+
+<!-- COMMAND REFERENCE -->
+<section id="cmd-system">
+<h2 data-i18n="cmd_system">System Commands</h2>
+<table class="doc-table cmd-ref">
+  <thead><tr><th>Command</th><th data-i18n="th_description">Description</th></tr></thead>
+  <tbody>
+    <tr><td><code>sys_info</code></td><td data-i18n="sys_cmd_sys_info">Full system information</td></tr>
+    <tr><td><code>sys_mem</code></td><td data-i18n="sys_cmd_sys_mem">Memory usage (free / allocated)</td></tr>
+    <tr><td><code>sys_gc</code></td><td data-i18n="sys_cmd_sys_gc">Run garbage collector</td></tr>
+    <tr><td><code>sys_uptime</code></td><td data-i18n="sys_cmd_sys_uptime">System uptime</td></tr>
+    <tr><td><code>sys_time</code></td><td data-i18n="sys_cmd_sys_time">Current date and time</td></tr>
+    <tr><td><code>sys_platform</code></td><td data-i18n="sys_cmd_sys_platform">Platform / chip info</td></tr>
+    <tr><td><code>sys_modules</code></td><td data-i18n="sys_cmd_sys_modules">List loaded modules</td></tr>
+    <tr><td><code>sys_ntp</code></td><td data-i18n="sys_cmd_sys_ntp">Sync time via NTP</td></tr>
+    <tr><td><code>reboot</code> / <code>reset</code></td><td data-i18n="sys_cmd_reboot">Reboot the device</td></tr>
+    <tr><td><code>version</code> / <code>about</code></td><td data-i18n="sys_cmd_version">Version information</td></tr>
+    <tr><td><code>help [topic]</code></td><td data-i18n="sys_cmd_help">Show help (all or by topic)</td></tr>
+    <tr><td><code>clear</code> / <code>cls</code></td><td data-i18n="sys_cmd_clear">Clear terminal</td></tr>
+  </tbody>
+</table>
+</section>
+
+<section id="cmd-gpio">
+<h2 data-i18n="cmd_gpio">GPIO / LED Commands</h2>
+<table class="doc-table cmd-ref">
+  <thead><tr><th>Command</th><th data-i18n="th_description">Description</th></tr></thead>
+  <tbody>
+    <tr><td><code>gpio_set &lt;pin&gt; &lt;value&gt;</code></td><td data-i18n="gpio_cmd_set">Set pin HIGH (1) or LOW (0)</td></tr>
+    <tr><td><code>gpio_get &lt;pin&gt;</code></td><td data-i18n="gpio_cmd_get">Read pin value</td></tr>
+    <tr><td><code>gpio_toggle &lt;pin&gt;</code></td><td data-i18n="gpio_cmd_toggle">Toggle pin state</td></tr>
+    <tr><td><code>gpio_mode &lt;pin&gt; &lt;mode&gt;</code></td><td data-i18n="gpio_cmd_mode">Set pin mode (IN/OUT/PP/OD)</td></tr>
+    <tr><td><code>gpio_list</code></td><td data-i18n="gpio_cmd_list">List all active GPIO pins</td></tr>
+    <tr><td><code>led_on [pin]</code></td><td data-i18n="gpio_cmd_led_on">Turn LED on (default GPIO2)</td></tr>
+    <tr><td><code>led_off [pin]</code></td><td data-i18n="gpio_cmd_led_off">Turn LED off</td></tr>
+    <tr><td><code>led_toggle [pin]</code></td><td data-i18n="gpio_cmd_led_toggle">Toggle LED</td></tr>
+    <tr><td><code>led_blink [pin] [n] [ms]</code></td><td data-i18n="gpio_cmd_led_blink">Blink LED n times</td></tr>
+    <tr><td><code>beep [pin] [freq] [ms]</code></td><td data-i18n="gpio_cmd_beep">Beep buzzer</td></tr>
+    <tr><td><code>adc_read &lt;pin&gt;</code></td><td data-i18n="gpio_cmd_adc_read">Read ADC value (0-4095)</td></tr>
+    <tr><td><code>adc_volt &lt;pin&gt;</code></td><td data-i18n="gpio_cmd_adc_volt">Read ADC as voltage</td></tr>
+    <tr><td><code>pwm_set &lt;pin&gt; &lt;duty&gt; [freq]</code></td><td data-i18n="gpio_cmd_pwm_set">Set PWM output</td></tr>
+    <tr><td><code>pwm_off &lt;pin&gt;</code></td><td data-i18n="gpio_cmd_pwm_off">Stop PWM on pin</td></tr>
+  </tbody>
+</table>
+</section>
+
+<section id="cmd-wifi">
+<h2 data-i18n="cmd_wifi">WiFi Commands</h2>
+<table class="doc-table cmd-ref">
+  <thead><tr><th>Command</th><th data-i18n="th_description">Description</th></tr></thead>
+  <tbody>
+    <tr><td><code>wifi_on</code></td><td data-i18n="wifi_cmd_on">Enable WiFi STA interface</td></tr>
+    <tr><td><code>wifi_off</code></td><td data-i18n="wifi_cmd_off">Disable WiFi</td></tr>
+    <tr><td><code>wifi_scan</code></td><td data-i18n="wifi_cmd_scan">Scan available networks</td></tr>
+    <tr><td><code>wifi_connect &lt;ssid&gt; &lt;pass&gt;</code></td><td data-i18n="wifi_cmd_connect">Connect to WiFi network</td></tr>
+    <tr><td><code>wifi_disconnect</code></td><td data-i18n="wifi_cmd_disconnect">Disconnect from WiFi</td></tr>
+    <tr><td><code>wifi_ip</code></td><td data-i18n="wifi_cmd_ip">Show current IP address</td></tr>
+    <tr><td><code>wifi_rssi</code></td><td data-i18n="wifi_cmd_rssi">Show signal strength</td></tr>
+    <tr><td><code>wifi_mac</code></td><td data-i18n="wifi_cmd_mac">Show MAC addresses</td></tr>
+    <tr><td><code>wifi_ap_start [ssid] [pass]</code></td><td data-i18n="wifi_cmd_ap_start">Start AP mode</td></tr>
+    <tr><td><code>wifi_ap_stop</code></td><td data-i18n="wifi_cmd_ap_stop">Stop AP mode</td></tr>
+    <tr><td><code>wifi_ap_list</code></td><td data-i18n="wifi_cmd_ap_list">List connected stations</td></tr>
+  </tbody>
+</table>
+</section>
+
+<section id="cmd-file">
+<h2 data-i18n="cmd_file">File System Commands</h2>
+<table class="doc-table cmd-ref">
+  <thead><tr><th>Command</th><th data-i18n="th_description">Description</th></tr></thead>
+  <tbody>
+    <tr><td><code>ls [path]</code></td><td data-i18n="file_cmd_ls">List directory contents</td></tr>
+    <tr><td><code>cat &lt;file&gt;</code></td><td data-i18n="file_cmd_cat">Display file contents</td></tr>
+    <tr><td><code>write &lt;file&gt; &lt;data&gt;</code></td><td data-i18n="file_cmd_write">Write data to file</td></tr>
+    <tr><td><code>append &lt;file&gt; &lt;data&gt;</code></td><td data-i18n="file_cmd_append">Append data to file</td></tr>
+    <tr><td><code>rm &lt;file&gt;</code></td><td data-i18n="file_cmd_rm">Delete file</td></tr>
+    <tr><td><code>mv &lt;src&gt; &lt;dst&gt;</code></td><td data-i18n="file_cmd_mv">Move / rename file</td></tr>
+    <tr><td><code>cp &lt;src&gt; &lt;dst&gt;</code></td><td data-i18n="file_cmd_cp">Copy file</td></tr>
+    <tr><td><code>mkdir &lt;dir&gt;</code></td><td data-i18n="file_cmd_mkdir">Create directory</td></tr>
+    <tr><td><code>tree [path]</code></td><td data-i18n="file_cmd_tree">Tree view of directory</td></tr>
+    <tr><td><code>grep &lt;pattern&gt; &lt;file&gt;</code></td><td data-i18n="file_cmd_grep">Search in file</td></tr>
+    <tr><td><code>head &lt;file&gt; [n]</code></td><td data-i18n="file_cmd_head">Show first n lines</td></tr>
+    <tr><td><code>tail &lt;file&gt; [n]</code></td><td data-i18n="file_cmd_tail">Show last n lines</td></tr>
+    <tr><td><code>wc &lt;file&gt;</code></td><td data-i18n="file_cmd_wc">Line / word / byte count</td></tr>
+    <tr><td><code>stat &lt;file&gt;</code></td><td data-i18n="file_cmd_stat">File metadata</td></tr>
+    <tr><td><code>fsize &lt;file&gt;</code></td><td data-i18n="file_cmd_fsize">File size in bytes</td></tr>
+    <tr><td><code>hexdump &lt;file&gt;</code></td><td data-i18n="file_cmd_hexdump">Hex dump of file</td></tr>
+    <tr><td><code>touch &lt;file&gt;</code></td><td data-i18n="file_cmd_touch">Create empty file</td></tr>
+  </tbody>
+</table>
+</section>
+
+<section id="cmd-sensor">
+<h2 data-i18n="cmd_sensor">Sensor / ADC Commands</h2>
+<table class="doc-table cmd-ref">
+  <thead><tr><th>Command</th><th data-i18n="th_description">Description</th></tr></thead>
+  <tbody>
+    <tr><td><code>adc_read &lt;pin&gt;</code></td><td data-i18n="sensor_cmd_adc_read">Read raw ADC (0-4095)</td></tr>
+    <tr><td><code>adc_volt &lt;pin&gt;</code></td><td data-i18n="sensor_cmd_adc_volt">Read voltage</td></tr>
+    <tr><td><code>adc_list</code></td><td data-i18n="sensor_cmd_adc_list">List ADC pins</td></tr>
+    <tr><td><code>dac_write &lt;pin&gt; &lt;value&gt;</code></td><td data-i18n="sensor_cmd_dac_write">Write DAC value (0-255)</td></tr>
+    <tr><td><code>dac_volt &lt;pin&gt; &lt;voltage&gt;</code></td><td data-i18n="sensor_cmd_dac_volt">Write voltage (0-3.3V)</td></tr>
+    <tr><td><code>touch_read &lt;pin&gt;</code></td><td data-i18n="sensor_cmd_touch_read">Read touch sensor</td></tr>
+    <tr><td><code>hall_read</code></td><td data-i18n="sensor_cmd_hall_read">Read hall effect sensor</td></tr>
+    <tr><td><code>ds18b20_init &lt;pin&gt;</code></td><td data-i18n="sensor_cmd_ds18b20_init">Init DS18B20 temperature sensor</td></tr>
+    <tr><td><code>ds18b20_read</code></td><td data-i18n="sensor_cmd_ds18b20_read">Read temperature</td></tr>
+    <tr><td><code>onewire_init &lt;pin&gt;</code></td><td data-i18n="sensor_cmd_onewire_init">Init 1-Wire bus</td></tr>
+    <tr><td><code>onewire_scan</code></td><td data-i18n="sensor_cmd_onewire_scan">Scan 1-Wire devices</td></tr>
+  </tbody>
+</table>
+</section>
+
+<section id="cmd-network">
+<h2 data-i18n="cmd_network">Network Commands</h2>
+<table class="doc-table cmd-ref">
+  <thead><tr><th>Command</th><th data-i18n="th_description">Description</th></tr></thead>
+  <tbody>
+    <tr><td><code>http_get &lt;url&gt;</code></td><td data-i18n="net_cmd_http_get">HTTP GET request</td></tr>
+    <tr><td><code>http_post &lt;url&gt; &lt;data&gt;</code></td><td data-i18n="net_cmd_http_post">HTTP POST request</td></tr>
+    <tr><td><code>http_server [port]</code></td><td data-i18n="net_cmd_http_server">Start HTTP server</td></tr>
+    <tr><td><code>mqtt_pub &lt;topic&gt; &lt;msg&gt;</code></td><td data-i18n="net_cmd_mqtt_pub">Publish MQTT message</td></tr>
+    <tr><td><code>mqtt_sub &lt;topic&gt;</code></td><td data-i18n="net_cmd_mqtt_sub">Subscribe to MQTT topic</td></tr>
+    <tr><td><code>tcp_send &lt;host&gt; &lt;port&gt; &lt;data&gt;</code></td><td data-i18n="net_cmd_tcp_send">Send TCP data</td></tr>
+    <tr><td><code>tcp_receive &lt;port&gt;</code></td><td data-i18n="net_cmd_tcp_receive">Start TCP receiver</td></tr>
+    <tr><td><code>udp_send &lt;host&gt; &lt;port&gt; &lt;data&gt;</code></td><td data-i18n="net_cmd_udp_send">Send UDP data</td></tr>
+    <tr><td><code>ble_scan</code></td><td data-i18n="net_cmd_ble_scan">Scan BLE devices</td></tr>
+    <tr><td><code>ble_advertise</code></td><td data-i18n="net_cmd_ble_advertise">Start BLE advertising</td></tr>
+    <tr><td><code>net_ping &lt;host&gt;</code></td><td data-i18n="net_cmd_net_ping">Ping a host</td></tr>
+    <tr><td><code>net_dns &lt;host&gt;</code></td><td data-i18n="net_cmd_net_dns">DNS lookup</td></tr>
+  </tbody>
+</table>
+</section>
+
+<section id="cmd-crypto">
+<h2 data-i18n="cmd_crypto">Crypto / Hash Commands</h2>
+<table class="doc-table cmd-ref">
+  <thead><tr><th>Command</th><th data-i18n="th_description">Description</th></tr></thead>
+  <tbody>
+    <tr><td><code>md5 &lt;text&gt;</code></td><td data-i18n="crypto_cmd_md5">MD5 hash</td></tr>
+    <tr><td><code>sha1 &lt;text&gt;</code></td><td data-i18n="crypto_cmd_sha1">SHA1 hash</td></tr>
+    <tr><td><code>sha256 &lt;text&gt;</code></td><td data-i18n="crypto_cmd_sha256">SHA256 hash</td></tr>
+    <tr><td><code>b64_encode &lt;text&gt;</code></td><td data-i18n="crypto_cmd_b64_encode">Base64 encode</td></tr>
+    <tr><td><code>b64_decode &lt;text&gt;</code></td><td data-i18n="crypto_cmd_b64_decode">Base64 decode</td></tr>
+    <tr><td><code>to_hex &lt;text&gt;</code></td><td data-i18n="crypto_cmd_to_hex">Text to hex</td></tr>
+    <tr><td><code>to_bin &lt;hex&gt;</code></td><td data-i18n="crypto_cmd_to_bin">Hex to text</td></tr>
+    <tr><td><code>hash_file &lt;file&gt; [algo]</code></td><td data-i18n="crypto_cmd_hash_file">Hash a file (md5/sha1/sha256)</td></tr>
+  </tbody>
+</table>
+</section>
+
+<section id="cmd-task">
+<h2 data-i18n="cmd_task">Task / Timer Commands</h2>
+<table class="doc-table cmd-ref">
+  <thead><tr><th>Command</th><th data-i18n="th_description">Description</th></tr></thead>
+  <tbody>
+    <tr><td><code>task_create &lt;code&gt;</code></td><td data-i18n="task_cmd_create">Create background task</td></tr>
+    <tr><td><code>task_list</code> / <code>ps</code></td><td data-i18n="task_cmd_list">List running tasks</td></tr>
+    <tr><td><code>task_delete &lt;id&gt;</code></td><td data-i18n="task_cmd_delete">Delete a task</td></tr>
+    <tr><td><code>task_info &lt;id&gt;</code></td><td data-i18n="task_cmd_info">Task details</td></tr>
+    <tr><td><code>timer_create &lt;ms&gt; &lt;code&gt;</code></td><td data-i18n="task_cmd_timer_create">Create periodic timer</td></tr>
+    <tr><td><code>timer_stop &lt;id&gt;</code></td><td data-i18n="task_cmd_timer_stop">Stop a timer</td></tr>
+    <tr><td><code>delay &lt;ms&gt;</code></td><td data-i18n="task_cmd_delay">Blocking delay</td></tr>
+    <tr><td><code>sleep &lt;seconds&gt;</code></td><td data-i18n="task_cmd_sleep">Sleep in seconds</td></tr>
+  </tbody>
+</table>
+</section>
+
+<!-- API -->
+<section id="api">
+<h2 data-i18n="api_title">HTTP API</h2>
+<p data-i18n="api_text">When the web server is running, these REST endpoints are available:</p>
+<table class="doc-table">
+  <thead><tr><th>Endpoint</th><th>Method</th><th data-i18n="th_response">Response</th></tr></thead>
+  <tbody>
+    <tr><td><code>/</code></td><td>GET</td><td data-i18n="api_resp_root">HTML page (default or custom)</td></tr>
+    <tr><td><code>/api/sysinfo</code></td><td>GET</td><td data-i18n="api_resp_sysinfo">JSON: chip, freq, mem_free, uptime</td></tr>
+    <tr><td><code>/api/mem</code></td><td>GET</td><td data-i18n="api_resp_mem">JSON: free, alloc, total memory</td></tr>
+    <tr><td><code>/api/gpio</code></td><td>GET</td><td data-i18n="api_resp_gpio">JSON: all GPIO pin states</td></tr>
+    <tr><td><code>/api/commands</code></td><td>GET</td><td data-i18n="api_resp_commands">JSON: command list and count</td></tr>
+  </tbody>
+</table>
+
+<div class="code-block">
+  <div class="code-bar">
+    <span class="lang">bash</span>
+    <button class="copy-btn" onclick="copyCode(this)">copy</button>
+  </div>
+  <pre>curl http://192.168.4.1/api/sysinfo
+<span class="cm">{"chip":"ESP32","freq":240,"mem_free":102400,"uptime":3600}</span>
+
+curl http://192.168.4.1/api/mem
+<span class="cm">{"free":102400,"alloc":51200,"total":153600}</span></pre>
+</div>
+</section>
+
+<!-- FOOTER -->
+<div class="doc-footer">
+  <p data-i18n="footer_text">LitopOS v1.0.0 Documentation</p>
+  <p data-i18n="footer_sub">MicroPython Embedded Shell for ESP32</p>
+</div>
+
+</main>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">Copied</div>
+
+<script>
+// === I18N ===
+const i18n = {
+  zh: {
+    logo: 'LitopOS<span>.v1.0.0</span>',
+    search_placeholder: '搜索命令...',
+    sb_getting_started: '快速开始',
+    sb_overview: '概览',
+    sb_install: '安装',
+    sb_first_run: '首次运行',
+    sb_core_systems: '核心系统',
+    sb_drives: '盘符系统',
+    sb_auth: '认证',
+    sb_apps: '应用管理',
+    sb_web: 'Web 服务器',
+    sb_command_reference: '命令参考',
+    sb_system: '系统',
+    sb_gpio: 'GPIO / LED',
+    sb_wifi: 'WiFi',
+    sb_file: '文件系统',
+    sb_sensor: '传感器 / ADC',
+    sb_network: '网络',
+    sb_crypto: '加密 / 哈希',
+    sb_task: '任务 / 定时器',
+    sb_api: 'HTTP 接口',
+    title: 'LitopOS 文档',
+    subtitle: '基于 ESP32 的 MicroPython 嵌入式 Shell -- 354 条命令、盘符系统、认证、应用管理器、Web 服务器。',
+    overview_text: '概览',
+    overview_desc: 'LitopOS 是运行在 ESP32 + MicroPython 上的微型操作系统。它提供类 Unix Shell 体验，包含 354 条命令、A-Z 盘符系统、用户认证、第三方应用管理器以及内置 AP Web 服务器。',
+    requirements: '环境要求',
+    requirements_text: 'ESP32 / ESP32-S2 / ESP32-S3 / ESP32-C3，需刷入 MicroPython 固件 (1.19+)。',
+    feature_summary: '功能概览',
+    shell_commands: 'Shell 命令',
+    shell_commands_val: '354 条已注册 + 61 个别名',
+    drive_system_feat: '盘符系统',
+    drive_system_feat_val: 'A-Z 从 Flash 分区自动挂载',
+    authentication_feat: '认证系统',
+    authentication_feat_val: 'admin/user 角色，SHA256 密码哈希',
+    app_manager_feat: '应用管理器',
+    app_manager_feat_val: '从 A:/.app/ 安装/运行/卸载 .py 应用',
+    web_server_feat: 'Web 服务器',
+    web_server_feat_val: 'AP 模式 + REST API + 自定义 HTML 托管',
+    hardware_feat: '硬件支持',
+    hardware_feat_val: 'GPIO、ADC、DAC、PWM、I2C、SPI、UART、1-Wire',
+    connectivity_feat: '连接能力',
+    connectivity_feat_val: 'WiFi (STA/AP)、BLE、HTTP、MQTT、TCP、UDP',
+    task_system_feat: '任务系统',
+    task_system_feat_val: '多线程、定时器、消息队列',
+    installation: '安装',
+    flash_firmware: '刷入 MicroPython 固件',
+    flash_firmware_desc: '下载 ESP32 MicroPython 固件，使用 esptool 刷入。',
+    upload_files: '上传 LitopOS 文件',
+    upload_files_desc: '使用 ampy 或 Thonny 将项目上传到 ESP32 Flash 文件系统。',
+    reset_device: '重启',
+    reset_device_desc: '按下 RST 按钮。LitopOS 将从 main.py 自动启动。',
+    required_files_note: '需要上传的文件（共 18 个）',
+    required_files_list: 'boot.py, main.py, litopos/__init__.py, litopos/core/ (6 个文件), litopos/commands/__init__.py, litopos/drivers/ (3 个文件), litopos/network/__init__.py, litopos/scheduler/__init__.py, litopos/utils/__init__.py',
+    not_required_note: '不需要上传',
+    not_required_list: 'quickstart.html、README.md、docs/、examples/、tests/ 仅供开发参考。',
+    first_run: '首次运行',
+    first_run_text: '重启后，LitopOS 显示启动画面，包含芯片检测、内存信息、盘符映射和功能列表。默认账户为 <code>admin</code> / <code>admin</code>。',
+    essential_commands: '常用命令',
+    drives_title: '盘符系统',
+    drives_text: '首次启动时，LitopOS 扫描所有 Flash 分区，将文件系统分区（SPIFFS、LittleFS、FAT）挂载为 A 到 Z 的盘符。A: 为默认盘符 -- 除非另有指定，所有文件都保存在此处。',
+    default_drive: '默认盘符',
+    default_drive_text: 'A: 始终为默认盘符。它包含 <code>.app/</code> 用于第三方应用和 <code>.auth.json</code> 用于用户数据。',
+    dir_structure: '目录结构',
+    commands: '命令',
+    th_description: '描述',
+    th_response: '响应',
+    drives_cmd_drives: '列出所有已挂载盘符及其类型和大小',
+    drives_cmd_drive: '浏览盘符上的文件（如 <code>drive A:</code>）',
+    drives_cmd_drive_free: '显示可用/已用空间及进度条',
+    drives_cmd_drive_browse: '浏览盘符上的子文件夹',
+    drives_cmd_drive_cd: '切换默认盘符',
+    auth_title: '认证',
+    auth_text: 'LitopOS 包含基于角色的用户认证系统。系统文件（<code>/boot.py</code>、<code>/main.py</code>、<code>/litopos/</code>）受保护，仅 admin 用户可删除。',
+    default_account: '默认账户',
+    security_note: '安全提示',
+    security_note_text: '默认凭据为 <code>admin</code> / <code>admin</code>。请立即使用 <code>passwd admin newpass</code> 修改密码。',
+    auth_cmd_login: '登录系统',
+    auth_cmd_logout: '注销当前用户',
+    auth_cmd_register: '创建新用户（仅 admin）',
+    auth_cmd_passwd: '修改当前用户密码',
+    auth_cmd_whoami: '显示当前用户和角色',
+    auth_cmd_users: '列出所有用户（仅 admin）',
+    auth_cmd_su: '切换到其他用户',
+    apps_title: '应用管理器',
+    apps_text: '第三方 Python 应用存储在 <code>A:/.app/</code> 中。应用是简单的 <code>.py</code> 文件，可通过专用命令安装、列出和运行。',
+    apps_cmd_install: '将 .py 文件安装到 .app/',
+    apps_cmd_uninstall: '卸载应用（仅 admin）',
+    apps_cmd_list: '列出所有已安装应用',
+    apps_cmd_info: '显示应用详情',
+    apps_cmd_run: '执行已安装的应用',
+    web_title: 'Web 服务器',
+    web_text: 'LitopOS 包含内置 HTTP 服务器，以 AP（接入点）模式运行。启动后会创建 WiFi 热点，向连接的客户端提供 HTML 页面。',
+    web_cmd_start: '启动 AP + Web 服务器（默认端口 80）',
+    web_cmd_stop: '停止 Web 服务器',
+    web_cmd_status: '显示服务器状态、IP 和路由数量',
+    web_cmd_page: '从文件设置自定义 HTML 页面',
+    web_cmd_file: '在 URL 路径上提供文件',
+    web_cmd_dir: '提供目录下所有文件',
+    web_cmd_route: '添加自定义 URL 路由',
+    web_cmd_clear: '清除所有自定义路由',
+    cmd_system: '系统命令',
+    sys_cmd_sys_info: '完整系统信息',
+    sys_cmd_sys_mem: '内存使用情况（可用/已分配）',
+    sys_cmd_sys_gc: '运行垃圾回收',
+    sys_cmd_sys_uptime: '系统运行时间',
+    sys_cmd_sys_time: '当前日期和时间',
+    sys_cmd_sys_platform: '平台/芯片信息',
+    sys_cmd_sys_modules: '列出已加载模块',
+    sys_cmd_sys_ntp: '通过 NTP 同步时间',
+    sys_cmd_reboot: '重启设备',
+    sys_cmd_version: '版本信息',
+    sys_cmd_help: '显示帮助（全部或按主题）',
+    sys_cmd_clear: '清屏',
+    cmd_gpio: 'GPIO / LED 命令',
+    gpio_cmd_set: '设置引脚高电平 (1) 或低电平 (0)',
+    gpio_cmd_get: '读取引脚值',
+    gpio_cmd_toggle: '切换引脚状态',
+    gpio_cmd_mode: '设置引脚模式 (IN/OUT/PP/OD)',
+    gpio_cmd_list: '列出所有活动 GPIO 引脚',
+    gpio_cmd_led_on: '打开 LED（默认 GPIO2）',
+    gpio_cmd_led_off: '关闭 LED',
+    gpio_cmd_led_toggle: '切换 LED',
+    gpio_cmd_led_blink: 'LED 闪烁 n 次',
+    gpio_cmd_beep: '蜂鸣器发声',
+    gpio_cmd_adc_read: '读取 ADC 值 (0-4095)',
+    gpio_cmd_adc_volt: '读取 ADC 电压',
+    gpio_cmd_pwm_set: '设置 PWM 输出',
+    gpio_cmd_pwm_off: '停止引脚 PWM',
+    cmd_wifi: 'WiFi 命令',
+    wifi_cmd_on: '启用 WiFi STA 接口',
+    wifi_cmd_off: '禁用 WiFi',
+    wifi_cmd_scan: '扫描可用网络',
+    wifi_cmd_connect: '连接 WiFi 网络',
+    wifi_cmd_disconnect: '断开 WiFi 连接',
+    wifi_cmd_ip: '显示当前 IP 地址',
+    wifi_cmd_rssi: '显示信号强度',
+    wifi_cmd_mac: '显示 MAC 地址',
+    wifi_cmd_ap_start: '启动 AP 模式',
+    wifi_cmd_ap_stop: '停止 AP 模式',
+    wifi_cmd_ap_list: '列出已连接站点',
+    cmd_file: '文件系统命令',
+    file_cmd_ls: '列出目录内容',
+    file_cmd_cat: '显示文件内容',
+    file_cmd_write: '写入数据到文件',
+    file_cmd_append: '追加数据到文件',
+    file_cmd_rm: '删除文件',
+    file_cmd_mv: '移动/重命名文件',
+    file_cmd_cp: '复制文件',
+    file_cmd_mkdir: '创建目录',
+    file_cmd_tree: '目录树形视图',
+    file_cmd_grep: '在文件中搜索',
+    file_cmd_head: '显示前 n 行',
+    file_cmd_tail: '显示后 n 行',
+    file_cmd_wc: '行数/词数/字节数统计',
+    file_cmd_stat: '文件元数据',
+    file_cmd_fsize: '文件大小（字节）',
+    file_cmd_hexdump: '文件十六进制转储',
+    file_cmd_touch: '创建空文件',
+    cmd_sensor: '传感器 / ADC 命令',
+    sensor_cmd_adc_read: '读取原始 ADC (0-4095)',
+    sensor_cmd_adc_volt: '读取电压',
+    sensor_cmd_adc_list: '列出 ADC 引脚',
+    sensor_cmd_dac_write: '写入 DAC 值 (0-255)',
+    sensor_cmd_dac_volt: '写入电压 (0-3.3V)',
+    sensor_cmd_touch_read: '读取触摸传感器',
+    sensor_cmd_hall_read: '读取霍尔效应传感器',
+    sensor_cmd_ds18b20_init: '初始化 DS18B20 温度传感器',
+    sensor_cmd_ds18b20_read: '读取温度',
+    sensor_cmd_onewire_init: '初始化 1-Wire 总线',
+    sensor_cmd_onewire_scan: '扫描 1-Wire 设备',
+    cmd_network: '网络命令',
+    net_cmd_http_get: 'HTTP GET 请求',
+    net_cmd_http_post: 'HTTP POST 请求',
+    net_cmd_http_server: '启动 HTTP 服务器',
+    net_cmd_mqtt_pub: '发布 MQTT 消息',
+    net_cmd_mqtt_sub: '订阅 MQTT 主题',
+    net_cmd_tcp_send: '发送 TCP 数据',
+    net_cmd_tcp_receive: '启动 TCP 接收器',
+    net_cmd_udp_send: '发送 UDP 数据',
+    net_cmd_ble_scan: '扫描 BLE 设备',
+    net_cmd_ble_advertise: '启动 BLE 广播',
+    net_cmd_net_ping: 'Ping 主机',
+    net_cmd_net_dns: 'DNS 查询',
+    cmd_crypto: '加密 / 哈希命令',
+    crypto_cmd_md5: 'MD5 哈希',
+    crypto_cmd_sha1: 'SHA1 哈希',
+    crypto_cmd_sha256: 'SHA256 哈希',
+    crypto_cmd_b64_encode: 'Base64 编码',
+    crypto_cmd_b64_decode: 'Base64 解码',
+    crypto_cmd_to_hex: '文本转十六进制',
+    crypto_cmd_to_bin: '十六进制转文本',
+    crypto_cmd_hash_file: '文件哈希 (md5/sha1/sha256)',
+    cmd_task: '任务 / 定时器命令',
+    task_cmd_create: '创建后台任务',
+    task_cmd_list: '列出运行中的任务',
+    task_cmd_delete: '删除任务',
+    task_cmd_info: '任务详情',
+    task_cmd_timer_create: '创建周期定时器',
+    task_cmd_timer_stop: '停止定时器',
+    task_cmd_delay: '阻塞延迟',
+    task_cmd_sleep: '睡眠（秒）',
+    api_title: 'HTTP API',
+    api_text: 'Web 服务器运行时，可使用以下 REST 接口：',
+    api_resp_root: 'HTML 页面（默认或自定义）',
+    api_resp_sysinfo: 'JSON: chip、freq、mem_free、uptime',
+    api_resp_mem: 'JSON: free、alloc、total 内存',
+    api_resp_gpio: 'JSON: 所有 GPIO 引脚状态',
+    api_resp_commands: 'JSON: 命令列表和数量',
+    no_commands_found: '未找到命令',
+    results: '个结果',
+    footer_text: 'LitopOS v1.0.0 文档',
+    footer_sub: '基于 ESP32 的 MicroPython 嵌入式 Shell'
+  },
+  en: {
+    logo: 'LitopOS<span>.v1.0.0</span>',
+    search_placeholder: 'Search commands...',
+    sb_getting_started: 'Getting Started',
+    sb_overview: 'Overview',
+    sb_install: 'Installation',
+    sb_first_run: 'First Run',
+    sb_core_systems: 'Core Systems',
+    sb_drives: 'Drive System',
+    sb_auth: 'Authentication',
+    sb_apps: 'App Manager',
+    sb_web: 'Web Server',
+    sb_command_reference: 'Command Reference',
+    sb_system: 'System',
+    sb_gpio: 'GPIO / LED',
+    sb_wifi: 'WiFi',
+    sb_file: 'File System',
+    sb_sensor: 'Sensor / ADC',
+    sb_network: 'Network',
+    sb_crypto: 'Crypto / Hash',
+    sb_task: 'Task / Timer',
+    sb_api: 'HTTP Endpoints',
+    title: 'LitopOS Documentation',
+    subtitle: 'MicroPython Embedded Shell for ESP32 -- 354 commands, drive system, auth, app manager, web server.',
+    overview_text: 'Overview',
+    overview_desc: 'LitopOS is a micro operating system running on ESP32 with MicroPython. It provides a Unix-like shell experience with 354 commands, an A-Z drive letter system, user authentication, a third-party app manager, and a built-in AP web server.',
+    requirements: 'Requirements',
+    requirements_text: 'ESP32 / ESP32-S2 / ESP32-S3 / ESP32-C3 with MicroPython firmware (1.19+).',
+    feature_summary: 'Feature Summary',
+    shell_commands: 'Shell Commands',
+    shell_commands_val: '354 registered + 61 aliases',
+    drive_system_feat: 'Drive System',
+    drive_system_feat_val: 'A-Z auto-mount from flash partitions',
+    authentication_feat: 'Authentication',
+    authentication_feat_val: 'admin/user roles, SHA256 password hashing',
+    app_manager_feat: 'App Manager',
+    app_manager_feat_val: 'Install/run/uninstall .py apps from A:/.app/',
+    web_server_feat: 'Web Server',
+    web_server_feat_val: 'AP mode + REST API + custom HTML hosting',
+    hardware_feat: 'Hardware',
+    hardware_feat_val: 'GPIO, ADC, DAC, PWM, I2C, SPI, UART, 1-Wire',
+    connectivity_feat: 'Connectivity',
+    connectivity_feat_val: 'WiFi (STA/AP), BLE, HTTP, MQTT, TCP, UDP',
+    task_system_feat: 'Task System',
+    task_system_feat_val: 'Multi-thread, timer, message queue',
+    installation: 'Installation',
+    flash_firmware: 'Flash MicroPython Firmware',
+    flash_firmware_desc: 'Download ESP32 MicroPython firmware and flash it with esptool.',
+    upload_files: 'Upload LitopOS Files',
+    upload_files_desc: 'Upload the project to the ESP32 flash filesystem using ampy or Thonny.',
+    reset_device: 'Reset',
+    reset_device_desc: 'Press the RST button. LitopOS boots automatically from main.py.',
+    required_files_note: 'Required Files (18 total)',
+    required_files_list: 'boot.py, main.py, litopos/__init__.py, litopos/core/ (6 files), litopos/commands/__init__.py, litopos/drivers/ (3 files), litopos/network/__init__.py, litopos/scheduler/__init__.py, litopos/utils/__init__.py',
+    not_required_note: 'Not Required',
+    not_required_list: 'quickstart.html, README.md, docs/, examples/, tests/ are for reference only.',
+    first_run: 'First Run',
+    first_run_text: 'After reset, LitopOS displays the boot screen with chip detection, memory info, drive mapping, and feature list. The default account is <code>admin</code> / <code>admin</code>.',
+    essential_commands: 'Essential Commands',
+    drives_title: 'Drive System',
+    drives_text: 'On first boot, LitopOS scans all flash partitions and mounts filesystem partitions (SPIFFS, LittleFS, FAT) as drive letters A through Z. Drive A: is the default -- all files are saved there unless you specify otherwise.',
+    default_drive: 'Default Drive',
+    default_drive_text: 'A: is always the default drive. It contains <code>.app/</code> for third-party apps and <code>.auth.json</code> for user data.',
+    dir_structure: 'Directory Structure',
+    commands: 'Commands',
+    th_description: 'Description',
+    th_response: 'Response',
+    drives_cmd_drives: 'List all mounted drives with type and size',
+    drives_cmd_drive: 'Browse files on a drive (e.g. <code>drive A:</code>)',
+    drives_cmd_drive_free: 'Show free/used space with progress bar',
+    drives_cmd_drive_browse: 'Browse a subfolder on a drive',
+    drives_cmd_drive_cd: 'Change the default drive',
+    auth_title: 'Authentication',
+    auth_text: 'LitopOS includes a user authentication system with role-based access control. System files (<code>/boot.py</code>, <code>/main.py</code>, <code>/litopos/</code>) are protected and can only be deleted by admin users.',
+    default_account: 'Default Account',
+    security_note: 'Security Note',
+    security_note_text: 'Default credentials are <code>admin</code> / <code>admin</code>. Change the password immediately with <code>passwd admin newpass</code>.',
+    auth_cmd_login: 'Login to the system',
+    auth_cmd_logout: 'Logout current user',
+    auth_cmd_register: 'Create new user (admin only)',
+    auth_cmd_passwd: 'Change current user password',
+    auth_cmd_whoami: 'Show current user and role',
+    auth_cmd_users: 'List all users (admin only)',
+    auth_cmd_su: 'Switch to another user',
+    apps_title: 'App Manager',
+    apps_text: 'Third-party Python applications are stored in <code>A:/.app/</code>. Apps are simple <code>.py</code> files that can be installed, listed, and run with dedicated commands.',
+    apps_cmd_install: 'Install a .py file into .app/',
+    apps_cmd_uninstall: 'Remove an app (admin only)',
+    apps_cmd_list: 'List all installed apps',
+    apps_cmd_info: 'Show app details',
+    apps_cmd_run: 'Execute an installed app',
+    web_title: 'Web Server',
+    web_text: 'LitopOS includes a built-in HTTP server that runs in AP (Access Point) mode. When started, it creates a WiFi hotspot and serves HTML pages to connected clients.',
+    web_cmd_start: 'Start AP + web server (default port 80)',
+    web_cmd_stop: 'Stop the web server',
+    web_cmd_status: 'Show server status, IP, and route count',
+    web_cmd_page: 'Set a custom HTML page from file',
+    web_cmd_file: 'Serve a file at a URL path',
+    web_cmd_dir: 'Serve all files from a directory',
+    web_cmd_route: 'Add a custom URL route',
+    web_cmd_clear: 'Remove all custom routes',
+    cmd_system: 'System Commands',
+    sys_cmd_sys_info: 'Full system information',
+    sys_cmd_sys_mem: 'Memory usage (free / allocated)',
+    sys_cmd_sys_gc: 'Run garbage collector',
+    sys_cmd_sys_uptime: 'System uptime',
+    sys_cmd_sys_time: 'Current date and time',
+    sys_cmd_sys_platform: 'Platform / chip info',
+    sys_cmd_sys_modules: 'List loaded modules',
+    sys_cmd_sys_ntp: 'Sync time via NTP',
+    sys_cmd_reboot: 'Reboot the device',
+    sys_cmd_version: 'Version information',
+    sys_cmd_help: 'Show help (all or by topic)',
+    sys_cmd_clear: 'Clear terminal',
+    cmd_gpio: 'GPIO / LED Commands',
+    gpio_cmd_set: 'Set pin HIGH (1) or LOW (0)',
+    gpio_cmd_get: 'Read pin value',
+    gpio_cmd_toggle: 'Toggle pin state',
+    gpio_cmd_mode: 'Set pin mode (IN/OUT/PP/OD)',
+    gpio_cmd_list: 'List all active GPIO pins',
+    gpio_cmd_led_on: 'Turn LED on (default GPIO2)',
+    gpio_cmd_led_off: 'Turn LED off',
+    gpio_cmd_led_toggle: 'Toggle LED',
+    gpio_cmd_led_blink: 'Blink LED n times',
+    gpio_cmd_beep: 'Beep buzzer',
+    gpio_cmd_adc_read: 'Read ADC value (0-4095)',
+    gpio_cmd_adc_volt: 'Read ADC as voltage',
+    gpio_cmd_pwm_set: 'Set PWM output',
+    gpio_cmd_pwm_off: 'Stop PWM on pin',
+    cmd_wifi: 'WiFi Commands',
+    wifi_cmd_on: 'Enable WiFi STA interface',
+    wifi_cmd_off: 'Disable WiFi',
+    wifi_cmd_scan: 'Scan available networks',
+    wifi_cmd_connect: 'Connect to WiFi network',
+    wifi_cmd_disconnect: 'Disconnect from WiFi',
+    wifi_cmd_ip: 'Show current IP address',
+    wifi_cmd_rssi: 'Show signal strength',
+    wifi_cmd_mac: 'Show MAC addresses',
+    wifi_cmd_ap_start: 'Start AP mode',
+    wifi_cmd_ap_stop: 'Stop AP mode',
+    wifi_cmd_ap_list: 'List connected stations',
+    cmd_file: 'File System Commands',
+    file_cmd_ls: 'List directory contents',
+    file_cmd_cat: 'Display file contents',
+    file_cmd_write: 'Write data to file',
+    file_cmd_append: 'Append data to file',
+    file_cmd_rm: 'Delete file',
+    file_cmd_mv: 'Move / rename file',
+    file_cmd_cp: 'Copy file',
+    file_cmd_mkdir: 'Create directory',
+    file_cmd_tree: 'Tree view of directory',
+    file_cmd_grep: 'Search in file',
+    file_cmd_head: 'Show first n lines',
+    file_cmd_tail: 'Show last n lines',
+    file_cmd_wc: 'Line / word / byte count',
+    file_cmd_stat: 'File metadata',
+    file_cmd_fsize: 'File size in bytes',
+    file_cmd_hexdump: 'Hex dump of file',
+    file_cmd_touch: 'Create empty file',
+    cmd_sensor: 'Sensor / ADC Commands',
+    sensor_cmd_adc_read: 'Read raw ADC (0-4095)',
+    sensor_cmd_adc_volt: 'Read voltage',
+    sensor_cmd_adc_list: 'List ADC pins',
+    sensor_cmd_dac_write: 'Write DAC value (0-255)',
+    sensor_cmd_dac_volt: 'Write voltage (0-3.3V)',
+    sensor_cmd_touch_read: 'Read touch sensor',
+    sensor_cmd_hall_read: 'Read hall effect sensor',
+    sensor_cmd_ds18b20_init: 'Init DS18B20 temperature sensor',
+    sensor_cmd_ds18b20_read: 'Read temperature',
+    sensor_cmd_onewire_init: 'Init 1-Wire bus',
+    sensor_cmd_onewire_scan: 'Scan 1-Wire devices',
+    cmd_network: 'Network Commands',
+    net_cmd_http_get: 'HTTP GET request',
+    net_cmd_http_post: 'HTTP POST request',
+    net_cmd_http_server: 'Start HTTP server',
+    net_cmd_mqtt_pub: 'Publish MQTT message',
+    net_cmd_mqtt_sub: 'Subscribe to MQTT topic',
+    net_cmd_tcp_send: 'Send TCP data',
+    net_cmd_tcp_receive: 'Start TCP receiver',
+    net_cmd_udp_send: 'Send UDP data',
+    net_cmd_ble_scan: 'Scan BLE devices',
+    net_cmd_ble_advertise: 'Start BLE advertising',
+    net_cmd_net_ping: 'Ping a host',
+    net_cmd_net_dns: 'DNS lookup',
+    cmd_crypto: 'Crypto / Hash Commands',
+    crypto_cmd_md5: 'MD5 hash',
+    crypto_cmd_sha1: 'SHA1 hash',
+    crypto_cmd_sha256: 'SHA256 hash',
+    crypto_cmd_b64_encode: 'Base64 encode',
+    crypto_cmd_b64_decode: 'Base64 decode',
+    crypto_cmd_to_hex: 'Text to hex',
+    crypto_cmd_to_bin: 'Hex to text',
+    crypto_cmd_hash_file: 'Hash a file (md5/sha1/sha256)',
+    cmd_task: 'Task / Timer Commands',
+    task_cmd_create: 'Create background task',
+    task_cmd_list: 'List running tasks',
+    task_cmd_delete: 'Delete a task',
+    task_cmd_info: 'Task details',
+    task_cmd_timer_create: 'Create periodic timer',
+    task_cmd_timer_stop: 'Stop a timer',
+    task_cmd_delay: 'Blocking delay',
+    task_cmd_sleep: 'Sleep in seconds',
+    api_title: 'HTTP API',
+    api_text: 'When the web server is running, these REST endpoints are available:',
+    api_resp_root: 'HTML page (default or custom)',
+    api_resp_sysinfo: 'JSON: chip, freq, mem_free, uptime',
+    api_resp_mem: 'JSON: free, alloc, total memory',
+    api_resp_gpio: 'JSON: all GPIO pin states',
+    api_resp_commands: 'JSON: command list and count',
+    no_commands_found: 'No commands found',
+    results: 'result(s)',
+    footer_text: 'LitopOS v1.0.0 Documentation',
+    footer_sub: 'MicroPython Embedded Shell for ESP32'
+  }
+};
+
+let currentLang = 'zh';
+
+function setLang(lang) {
+  currentLang = lang;
+  localStorage.setItem('litopos-lang', lang);
+  document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
+
+  // Update lang button text
+  const langBtn = document.getElementById('langBtn');
+  langBtn.textContent = lang === 'zh' ? 'EN' : '\u4E2D';
+
+  // Update all data-i18n elements
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (i18n[lang] && i18n[lang][key] !== undefined) {
+      el.innerHTML = i18n[lang][key];
+    }
+  });
+
+  // Update all data-i18n-placeholder elements
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+    const key = el.getAttribute('data-i18n-placeholder');
+    if (i18n[lang] && i18n[lang][key] !== undefined) {
+      el.placeholder = i18n[lang][key];
+    }
+  });
+}
+
+function toggleLang() {
+  setLang(currentLang === 'zh' ? 'en' : 'zh');
+}
+
+// === THEME ===
+const sunSVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>';
+const moonSVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
+
+let currentTheme = 'light';
+
+function setTheme(theme) {
+  currentTheme = theme;
+  localStorage.setItem('litopos-theme', theme);
+  const icon = document.getElementById('themeIcon');
+  if (theme === 'dark') {
+    document.documentElement.setAttribute('data-theme', 'dark');
+    icon.outerHTML = '<span id="themeIcon">' + moonSVG + '</span>';
+  } else {
+    document.documentElement.removeAttribute('data-theme');
+    icon.outerHTML = '<span id="themeIcon">' + sunSVG + '</span>';
+  }
+}
+
+function toggleTheme() {
+  setTheme(currentTheme === 'light' ? 'dark' : 'light');
+}
+
+// === INIT ===
+(function init() {
+  // Init language
+  const savedLang = localStorage.getItem('litopos-lang');
+  if (savedLang && (savedLang === 'zh' || savedLang === 'en')) {
+    setLang(savedLang);
+  } else {
+    const nav = navigator.language || navigator.userLanguage || '';
+    setLang(nav.startsWith('en') ? 'en' : 'zh');
+  }
+
+  // Init theme
+  const savedTheme = localStorage.getItem('litopos-theme');
+  if (savedTheme && (savedTheme === 'light' || savedTheme === 'dark')) {
+    setTheme(savedTheme);
+  } else {
+    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    setTheme(prefersDark ? 'dark' : 'light');
+  }
+})();
+
+// === COMMAND DATABASE (for search) ===
+const commands = [
+  // System
+  {cmd:'sys_info', desc_zh:'完整系统信息', desc_en:'Full system information', cat:'system'},
+  {cmd:'sys_mem', desc_zh:'内存使用情况', desc_en:'Memory usage', cat:'system'},
+  {cmd:'sys_gc', desc_zh:'运行垃圾回收', desc_en:'Run garbage collector', cat:'system'},
+  {cmd:'sys_uptime', desc_zh:'系统运行时间', desc_en:'System uptime', cat:'system'},
+  {cmd:'sys_time', desc_zh:'当前日期和时间', desc_en:'Current date and time', cat:'system'},
+  {cmd:'sys_platform', desc_zh:'平台/芯片信息', desc_en:'Platform / chip info', cat:'system'},
+  {cmd:'sys_modules', desc_zh:'列出已加载模块', desc_en:'List loaded modules', cat:'system'},
+  {cmd:'sys_ntp', desc_zh:'通过 NTP 同步时间', desc_en:'Sync time via NTP', cat:'system'},
+  {cmd:'reboot', desc_zh:'重启设备', desc_en:'Reboot the device', cat:'system'},
+  {cmd:'reset', desc_zh:'重置设备', desc_en:'Reset the device', cat:'system'},
+  {cmd:'version', desc_zh:'版本信息', desc_en:'Version information', cat:'system'},
+  {cmd:'about', desc_zh:'关于 LitopOS', desc_en:'About LitopOS', cat:'system'},
+  {cmd:'help', desc_zh:'显示帮助（全部或按主题）', desc_en:'Show help (all or by topic)', cat:'system'},
+  {cmd:'clear', desc_zh:'清屏', desc_en:'Clear terminal', cat:'system'},
+  {cmd:'cls', desc_zh:'清屏（别名）', desc_en:'Clear terminal (alias)', cat:'system'},
+  // GPIO
+  {cmd:'gpio_set', desc_zh:'设置引脚高/低电平', desc_en:'Set pin HIGH/LOW', cat:'gpio'},
+  {cmd:'gpio_get', desc_zh:'读取引脚值', desc_en:'Read pin value', cat:'gpio'},
+  {cmd:'gpio_toggle', desc_zh:'切换引脚状态', desc_en:'Toggle pin state', cat:'gpio'},
+  {cmd:'gpio_mode', desc_zh:'设置引脚模式 (IN/OUT/PP/OD)', desc_en:'Set pin mode (IN/OUT/PP/OD)', cat:'gpio'},
+  {cmd:'gpio_list', desc_zh:'列出活动 GPIO 引脚', desc_en:'List active GPIO pins', cat:'gpio'},
+  {cmd:'led_on', desc_zh:'打开 LED', desc_en:'Turn LED on', cat:'gpio'},
+  {cmd:'led_off', desc_zh:'关闭 LED', desc_en:'Turn LED off', cat:'gpio'},
+  {cmd:'led_toggle', desc_zh:'切换 LED', desc_en:'Toggle LED', cat:'gpio'},
+  {cmd:'led_blink', desc_zh:'LED 闪烁 n 次', desc_en:'Blink LED n times', cat:'gpio'},
+  {cmd:'beep', desc_zh:'蜂鸣器发声', desc_en:'Beep buzzer', cat:'gpio'},
+  {cmd:'adc_read', desc_zh:'读取 ADC (0-4095)', desc_en:'Read ADC (0-4095)', cat:'gpio'},
+  {cmd:'adc_volt', desc_zh:'读取电压', desc_en:'Read voltage', cat:'gpio'},
+  {cmd:'pwm_set', desc_zh:'设置 PWM 输出', desc_en:'Set PWM output', cat:'gpio'},
+  {cmd:'pwm_off', desc_zh:'停止 PWM', desc_en:'Stop PWM', cat:'gpio'},
+  // WiFi
+  {cmd:'wifi_on', desc_zh:'启用 WiFi', desc_en:'Enable WiFi', cat:'wifi'},
+  {cmd:'wifi_off', desc_zh:'禁用 WiFi', desc_en:'Disable WiFi', cat:'wifi'},
+  {cmd:'wifi_scan', desc_zh:'扫描网络', desc_en:'Scan networks', cat:'wifi'},
+  {cmd:'wifi_connect', desc_zh:'连接 WiFi', desc_en:'Connect to WiFi', cat:'wifi'},
+  {cmd:'wifi_disconnect', desc_zh:'断开 WiFi', desc_en:'Disconnect WiFi', cat:'wifi'},
+  {cmd:'wifi_ip', desc_zh:'显示 IP 地址', desc_en:'Show IP address', cat:'wifi'},
+  {cmd:'wifi_rssi', desc_zh:'信号强度', desc_en:'Signal strength', cat:'wifi'},
+  {cmd:'wifi_mac', desc_zh:'MAC 地址', desc_en:'MAC addresses', cat:'wifi'},
+  {cmd:'wifi_ap_start', desc_zh:'启动 AP 模式', desc_en:'Start AP mode', cat:'wifi'},
+  {cmd:'wifi_ap_stop', desc_zh:'停止 AP 模式', desc_en:'Stop AP mode', cat:'wifi'},
+  // File
+  {cmd:'ls', desc_zh:'列出目录', desc_en:'List directory', cat:'file'},
+  {cmd:'cat', desc_zh:'显示文件', desc_en:'Display file', cat:'file'},
+  {cmd:'write', desc_zh:'写入文件', desc_en:'Write to file', cat:'file'},
+  {cmd:'append', desc_zh:'追加到文件', desc_en:'Append to file', cat:'file'},
+  {cmd:'rm', desc_zh:'删除文件', desc_en:'Delete file', cat:'file'},
+  {cmd:'mv', desc_zh:'移动/重命名', desc_en:'Move / rename', cat:'file'},
+  {cmd:'cp', desc_zh:'复制文件', desc_en:'Copy file', cat:'file'},
+  {cmd:'mkdir', desc_zh:'创建目录', desc_en:'Create directory', cat:'file'},
+  {cmd:'tree', desc_zh:'树形视图', desc_en:'Tree view', cat:'file'},
+  {cmd:'grep', desc_zh:'在文件中搜索', desc_en:'Search in file', cat:'file'},
+  {cmd:'head', desc_zh:'显示前 n 行', desc_en:'First n lines', cat:'file'},
+  {cmd:'tail', desc_zh:'显示后 n 行', desc_en:'Last n lines', cat:'file'},
+  {cmd:'wc', desc_zh:'行数/词数/字节数统计', desc_en:'Line/word/byte count', cat:'file'},
+  {cmd:'stat', desc_zh:'文件元数据', desc_en:'File metadata', cat:'file'},
+  {cmd:'touch', desc_zh:'创建空文件', desc_en:'Create empty file', cat:'file'},
+  // Drive
+  {cmd:'drives', desc_zh:'列出所有盘符', desc_en:'List all drives', cat:'drive'},
+  {cmd:'drive', desc_zh:'浏览盘符内容', desc_en:'Browse drive contents', cat:'drive'},
+  {cmd:'drive_free', desc_zh:'盘符可用空间', desc_en:'Drive free space', cat:'drive'},
+  {cmd:'drive_browse', desc_zh:'浏览子文件夹', desc_en:'Browse subfolder', cat:'drive'},
+  {cmd:'drive_cd', desc_zh:'切换默认盘符', desc_en:'Change default drive', cat:'drive'},
+  // Auth
+  {cmd:'login', desc_zh:'登录系统', desc_en:'Login to system', cat:'auth'},
+  {cmd:'logout', desc_zh:'注销', desc_en:'Logout', cat:'auth'},
+  {cmd:'register', desc_zh:'创建用户（仅 admin）', desc_en:'Create user (admin)', cat:'auth'},
+  {cmd:'passwd', desc_zh:'修改密码', desc_en:'Change password', cat:'auth'},
+  {cmd:'whoami', desc_zh:'当前用户信息', desc_en:'Current user info', cat:'auth'},
+  {cmd:'users', desc_zh:'列出用户（仅 admin）', desc_en:'List users (admin)', cat:'auth'},
+  {cmd:'su', desc_zh:'切换用户', desc_en:'Switch user', cat:'auth'},
+  // App
+  {cmd:'app_install', desc_zh:'安装应用', desc_en:'Install app', cat:'app'},
+  {cmd:'app_uninstall', desc_zh:'卸载应用', desc_en:'Remove app', cat:'app'},
+  {cmd:'app_list', desc_zh:'列出应用', desc_en:'List apps', cat:'app'},
+  {cmd:'app_info', desc_zh:'应用详情', desc_en:'App details', cat:'app'},
+  {cmd:'app_run', desc_zh:'运行应用', desc_en:'Run app', cat:'app'},
+  {cmd:'run', desc_zh:'运行应用（别名）', desc_en:'Run app (alias)', cat:'app'},
+  // Web
+  {cmd:'web_start', desc_zh:'启动 AP Web 服务器', desc_en:'Start AP web server', cat:'web'},
+  {cmd:'web_stop', desc_zh:'停止 Web 服务器', desc_en:'Stop web server', cat:'web'},
+  {cmd:'web_status', desc_zh:'服务器状态', desc_en:'Server status', cat:'web'},
+  {cmd:'web_page', desc_zh:'设置 HTML 页面', desc_en:'Set HTML page', cat:'web'},
+  {cmd:'web_file', desc_zh:'提供文件', desc_en:'Serve file', cat:'web'},
+  {cmd:'web_dir', desc_zh:'提供目录', desc_en:'Serve directory', cat:'web'},
+  {cmd:'web_route', desc_zh:'添加 URL 路由', desc_en:'Add URL route', cat:'web'},
+  {cmd:'web_clear', desc_zh:'清除路由', desc_en:'Clear routes', cat:'web'},
+  // Network
+  {cmd:'http_get', desc_zh:'HTTP GET 请求', desc_en:'HTTP GET request', cat:'network'},
+  {cmd:'http_post', desc_zh:'HTTP POST 请求', desc_en:'HTTP POST request', cat:'network'},
+  {cmd:'mqtt_pub', desc_zh:'MQTT 发布', desc_en:'MQTT publish', cat:'network'},
+  {cmd:'mqtt_sub', desc_zh:'MQTT 订阅', desc_en:'MQTT subscribe', cat:'network'},
+  {cmd:'tcp_send', desc_zh:'发送 TCP 数据', desc_en:'Send TCP data', cat:'network'},
+  {cmd:'udp_send', desc_zh:'发送 UDP 数据', desc_en:'Send UDP data', cat:'network'},
+  {cmd:'ble_scan', desc_zh:'扫描 BLE 设备', desc_en:'Scan BLE devices', cat:'network'},
+  {cmd:'net_ping', desc_zh:'Ping 主机', desc_en:'Ping host', cat:'network'},
+  {cmd:'net_dns', desc_zh:'DNS 查询', desc_en:'DNS lookup', cat:'network'},
+  // Crypto
+  {cmd:'md5', desc_zh:'MD5 哈希', desc_en:'MD5 hash', cat:'crypto'},
+  {cmd:'sha256', desc_zh:'SHA256 哈希', desc_en:'SHA256 hash', cat:'crypto'},
+  {cmd:'b64_encode', desc_zh:'Base64 编码', desc_en:'Base64 encode', cat:'crypto'},
+  {cmd:'b64_decode', desc_zh:'Base64 解码', desc_en:'Base64 decode', cat:'crypto'},
+  {cmd:'to_hex', desc_zh:'文本转十六进制', desc_en:'Text to hex', cat:'crypto'},
+  {cmd:'to_bin', desc_zh:'十六进制转文本', desc_en:'Hex to text', cat:'crypto'},
+  // Task
+  {cmd:'task_create', desc_zh:'创建后台任务', desc_en:'Create background task', cat:'task'},
+  {cmd:'task_list', desc_zh:'列出任务', desc_en:'List tasks', cat:'task'},
+  {cmd:'task_delete', desc_zh:'删除任务', desc_en:'Delete task', cat:'task'},
+  {cmd:'timer_create', desc_zh:'创建定时器', desc_en:'Create timer', cat:'task'},
+  {cmd:'delay', desc_zh:'阻塞延迟 (ms)', desc_en:'Blocking delay (ms)', cat:'task'},
+  {cmd:'sleep', desc_zh:'睡眠（秒）', desc_en:'Sleep (seconds)', cat:'task'},
+  // Sensor
+  {cmd:'dac_write', desc_zh:'写入 DAC 值', desc_en:'Write DAC value', cat:'sensor'},
+  {cmd:'touch_read', desc_zh:'读取触摸传感器', desc_en:'Read touch sensor', cat:'sensor'},
+  {cmd:'hall_read', desc_zh:'霍尔效应传感器', desc_en:'Hall effect sensor', cat:'sensor'},
+  {cmd:'ds18b20_init', desc_zh:'初始化 DS18B20', desc_en:'Init DS18B20', cat:'sensor'},
+  {cmd:'ds18b20_read', desc_zh:'读取温度', desc_en:'Read temperature', cat:'sensor'},
+  {cmd:'onewire_init', desc_zh:'初始化 1-Wire 总线', desc_en:'Init 1-Wire bus', cat:'sensor'},
+  {cmd:'onewire_scan', desc_zh:'扫描 1-Wire 设备', desc_en:'Scan 1-Wire devices', cat:'sensor'},
+  // Misc
+  {cmd:'echo', desc_zh:'打印文本', desc_en:'Print text', cat:'system'},
+  {cmd:'math', desc_zh:'计算数学表达式', desc_en:'Evaluate math expression', cat:'system'},
+  {cmd:'random', desc_zh:'随机数', desc_en:'Random number', cat:'system'},
+  {cmd:'json_parse', desc_zh:'解析 JSON', desc_en:'Parse JSON', cat:'system'},
+  {cmd:'config_list', desc_zh:'列出配置', desc_en:'List config', cat:'system'},
+  {cmd:'config_set', desc_zh:'设置配置值', desc_en:'Set config value', cat:'system'},
+  {cmd:'config_get', desc_zh:'获取配置值', desc_en:'Get config value', cat:'system'},
+  {cmd:'power_freq', desc_zh:'设置 CPU 频率', desc_en:'Set CPU frequency', cat:'system'},
+  {cmd:'deep_sleep', desc_zh:'进入深度睡眠', desc_en:'Enter deep sleep', cat:'system'},
+];
+
+// === SEARCH ===
+const searchInput = document.getElementById('searchInput');
+const searchResults = document.getElementById('searchResults');
+
+function getCmdDesc(c) {
+  return currentLang === 'zh' ? c.desc_zh : c.desc_en;
+}
+
+searchInput.addEventListener('input', function() {
+  const q = this.value.trim().toLowerCase();
+  if (q.length < 1) {
+    searchResults.classList.remove('active');
+    return;
+  }
+  const matches = commands.filter(c =>
+    c.cmd.toLowerCase().includes(q) ||
+    getCmdDesc(c).toLowerCase().includes(q) ||
+    c.cat.toLowerCase().includes(q)
+  );
+  const t = i18n[currentLang];
+  if (matches.length === 0) {
+    searchResults.innerHTML = '<div class="sr-empty">' + (t.no_commands_found || 'No commands found') + '</div>';
+  } else {
+    searchResults.innerHTML =
+      '<div class="sr-count">' + matches.length + ' ' + (t.results || 'result(s)') + '</div>' +
+      matches.map(c =>
+        '<div class="sr-item" onclick="goCmd(\'' + c.cmd + '\')">' +
+        '<code>' + c.cmd + '</code>' +
+        '<span>' + getCmdDesc(c) + ' -- ' + c.cat + '</span>' +
+        '</div>'
+      ).join('');
+  }
+  searchResults.classList.add('active');
+});
+
+searchInput.addEventListener('blur', function() {
+  setTimeout(() => searchResults.classList.remove('active'), 200);
+});
+
+function goCmd(cmd) {
+  searchResults.classList.remove('active');
+  searchInput.value = '';
+  const tables = document.querySelectorAll('.cmd-ref tbody tr td code');
+  for (const td of tables) {
+    if (td.textContent.trim() === cmd || td.textContent.trim().startsWith(cmd + ' ')) {
+      td.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      td.style.background = 'var(--highlight-bg)';
+      setTimeout(() => td.style.background = '', 2000);
+      return;
+    }
+  }
+}
+
+// === COPY ===
+function copyCode(btn) {
+  const pre = btn.closest('.code-block').querySelector('pre');
+  navigator.clipboard.writeText(pre.innerText).then(() => {
+    const toast = document.getElementById('toast');
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 1500);
+  });
+}
+
+// === SMOOTH SCROLL ===
+document.querySelectorAll('.sb-link[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+});
+
+// === ACTIVE SIDEBAR LINK ===
+const sections = document.querySelectorAll('section[id]');
+const sbLinks = document.querySelectorAll('.sb-link');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(s => {
+    if (window.scrollY >= s.offsetTop - 80) current = s.id;
+  });
+  sbLinks.forEach(l => {
+    l.classList.toggle('active', l.getAttribute('href') === '#' + current);
+  });
+});
+</script>
+</body>
+</html>
